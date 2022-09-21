@@ -235,6 +235,18 @@ if ( ! class_exists( 'Storefront' ) ) :
 			 * Add support for responsive embedded content.
 			 */
 			add_theme_support( 'responsive-embeds' );
+
+			add_theme_support(
+				'amp',
+				array(
+					'nav_menu_toggle' => array(
+						'nav_container_id'           => 'site-navigation',
+						'nav_container_toggle_class' => 'toggled',
+						'menu_button_id'             => 'site-navigation-menu-toggle',
+						'menu_button_toggle_class'   => 'toggled',
+					),
+				)
+			);
 		}
 
 		/**
@@ -343,7 +355,6 @@ if ( ! class_exists( 'Storefront' ) ) :
 			$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
 			wp_enqueue_script( 'storefront-navigation', get_template_directory_uri() . '/assets/js/navigation' . $suffix . '.js', array(), $storefront_version, true );
-			wp_enqueue_script( 'storefront-skip-link-focus-fix', get_template_directory_uri() . '/assets/js/skip-link-focus-fix' . $suffix . '.js', array(), '20130115', true );
 
 			if ( has_nav_menu( 'handheld' ) ) {
 				$storefront_l10n = array(
@@ -361,8 +372,6 @@ if ( ! class_exists( 'Storefront' ) ) :
 			if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 				wp_enqueue_script( 'comment-reply' );
 			}
-
-			wp_enqueue_script( 'jquery-pep', get_template_directory_uri() . '/assets/js/vendor/pep.min.js', array(), '0.4.3', true );
 		}
 
 		/**

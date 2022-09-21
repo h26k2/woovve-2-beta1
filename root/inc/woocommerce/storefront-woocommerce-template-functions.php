@@ -30,65 +30,6 @@ if ( ! function_exists( 'storefront_before_content' ) ) {
 		?>
 		<div id="primary" class="content-area">
 			<main id="main" class="site-main" role="main">
-				<header class="entry-header">
-			
-						<?php 
-
-          $args = array(
-              'post_type'=> 'headline-ad',
-              'order'    => 'ASC'
-          );              
-          	$count = 0;
-          $the_query = new WP_Query( $args );
-          if($the_query->have_posts() ) : 
-              while ( $the_query->have_posts() ) : 
-                 $the_query->the_post(); 
-          ?>
-
-          <?php 
-
-          	global $wp;
-			$current_link_head = "$_SERVER[REQUEST_URI]";
-        	$page_link_head = get_field('page_link');?>
-
-        	<?php if(!empty($page_link_head)) : ?>
-        		<?php if ($current_link_head == $page_link_head) { ?>
-        			<?php the_field('ad_content'); ?>
-        	<?php $count=1; ?>
-
-        		<?php } ?>
-        	
-
-        	<?php //echo $count;
-        	?>
-        	<?php endif;?>
-          <?php
-
-              endwhile;
-              while ( $the_query->have_posts() ) : 
-                 $the_query->the_post(); 
-          ?>
-
-          <?php global $wp;
-			$current_link_head = "$_SERVER[REQUEST_URI]";
-        	$page_link_head = get_field('page_link');?>
-
-
-
-        	<?php if($count == 0) : ?>
-        		<?php if (empty($page_link_head)) { ?>
-        			<?php the_field('ad_content'); ?>
-        		<?php } ?>	
-        	
-        	<?php endif;?>
-          <?php
-
-              endwhile; 
-              wp_reset_postdata(); 
-          else: 
-          endif;
-
-          ?>
 		<?php
 	}
 }
@@ -173,7 +114,8 @@ if ( ! function_exists( 'storefront_product_search' ) ) {
 		}
 	}
 }
- if ( ! function_exists( 'storefront_header_cart' ) ) {
+
+if ( ! function_exists( 'storefront_header_cart' ) ) {
 	/**
 	 * Display Header Cart
 	 *
@@ -182,23 +124,23 @@ if ( ! function_exists( 'storefront_product_search' ) ) {
 	 * @return void
 	 */
 	function storefront_header_cart() {
-//		if ( storefront_is_woocommerce_activated() ) {
-//			if ( is_cart() ) {
-//				$class = 'current-menu-item';
-//			} else {
-//				$class = '';
-//			}
+		if ( storefront_is_woocommerce_activated() ) {
+			if ( is_cart() ) {
+				$class = 'current-menu-item';
+			} else {
+				$class = '';
+			}
 			?>
-		<!-- <ul id="site-header-cart" class="site-header-cart menu">
-			<li class="<?php //echo esc_attr( $class ); ?>">
-				<?php //storefront_cart_link(); ?>
+		<ul id="site-header-cart" class="site-header-cart menu">
+			<li class="<?php echo esc_attr( $class ); ?>">
+				<?php storefront_cart_link(); ?>
 			</li>
 			<li>
-				<?php //the_widget( 'WC_Widget_Cart', 'title=' ); ?>
+				<?php the_widget( 'WC_Widget_Cart', 'title=' ); ?>
 			</li>
-		</ul> -->
+		</ul>
 			<?php
-//		}
+		}
 	}
 }
 
@@ -237,11 +179,6 @@ if ( ! function_exists( 'storefront_sorting_wrapper_close' ) ) {
 	 * @return  void
 	 */
 	function storefront_sorting_wrapper_close() {
-		echo '<div class="ser-cat">';
-		 
-		 the_widget( 'WC_Widget_Product_Categories', 'dropdown=1' );
-		echo '</div>';
-	   
 		echo '</div>';
 	}
 }
@@ -752,19 +689,19 @@ if ( ! function_exists( 'storefront_handheld_footer_bar' ) ) {
 
 		$links = apply_filters( 'storefront_handheld_footer_bar_links', $links );
 		?>
-		<!-- <div class="storefront-handheld-footer-bar">
-			<ul class="columns-<?php //echo count( $links ); ?>">
-		 -->		<?php //foreach ( $links as $key => $link ) : ?>
-					<!-- <li class="<?php //echo esc_attr( $key ); ?>"> -->
+		<div class="storefront-handheld-footer-bar">
+			<ul class="columns-<?php echo count( $links ); ?>">
+				<?php foreach ( $links as $key => $link ) : ?>
+					<li class="<?php echo esc_attr( $key ); ?>">
 						<?php
-						//if ( $link['callback'] ) {
-						//	call_user_func( $link['callback'], $key, $link );
-						//}
+						if ( $link['callback'] ) {
+							call_user_func( $link['callback'], $key, $link );
+						}
 						?>
-					<!-- </li> --> 
-				<?php //endforeach; ?>
-			<!-- </ul>
-		</div> -->
+					</li>
+				<?php endforeach; ?>
+			</ul>
+		</div>
 		<?php
 	}
 }
@@ -866,7 +803,7 @@ if ( ! function_exists( 'storefront_sticky_single_add_to_cart' ) ) {
 			return;
 		}
 
-		if ( ! is_product() ) {
+		if ( ! $product || ! is_product() ) {
 			return;
 		}
 
